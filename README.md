@@ -1,6 +1,6 @@
 # TestForge: Confluence Requirements → AI Test Cases → AI Automation Scripts
 
-IT6070 Emerging Topics in IT, Assignment II (SLIIT MSc/PGD IT 2026)
+IT6070 Emerging Topics in IT, Assignment II (SLIIT MSc/PGD IT 2026) · Student: I.M.R.Y. Ilangasinghe (MS25914214) · Repository: https://github.com/Yashodha98/testforge
 
 TestForge is a proof of concept for a **Senior QA Engineer working on a Hospital Management System**. Today they read requirements in Confluence, write test cases by hand (about 1 day per epic), manage them in TestRail and automate them in Cypress. The problem and requirements come from a real interview (anonymised; see the evidence PDF).
 
@@ -21,17 +21,18 @@ TestForge is a proof of concept for a **Senior QA Engineer working on a Hospital
 - Node.js (optional) enables the JavaScript syntax check of generated Cypress specs
 - To *run* the generated specs (optional): copy them into a Cypress project's `cypress/e2e/` and run `npx cypress run`
 
-## 2. Installation
+## 2. Installation and execution instructions
+### Installation
 ```bash
-git clone <your-repo-url> testforge
+git clone https://github.com/Yashodha98/testforge.git
 cd testforge
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env               # then paste your Claude (or Gemini) key into .env
+cp .env.example .env               # Windows: copy .env.example .env  – then paste your Claude (or Gemini) key into .env
 ```
 
-## 3. Running
+### Execution
 ```bash
 streamlit run app.py
 ```
@@ -44,7 +45,7 @@ Toggle **Force offline mode** in the sidebar to demonstrate the fallback.
 
 **How to export a page from Confluence:** open the page, then choose ••• (More actions) → Export → Word or PDF.
 
-## 4. API / configuration
+## 3. Required API and configuration information
 | Variable | Required | Description |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | No (fallback without it) | Claude key (`sk-ant-...`) from https://console.anthropic.com/settings/keys; prepaid credit needed. Used first if set. You can also paste it in the sidebar; it is held in memory only. |
@@ -55,16 +56,16 @@ Toggle **Force offline mode** in the sidebar to demonstrate the fallback.
 
 No keys or passwords are included in this repository. `.env` is git-ignored.
 
-## 5. Login details
-Not applicable. The PoC is a single-user local app.
+## 4. Sample login details
+Not applicable – TestForge has no user login (single-user local app). The only credential is your own AI API key, which is **not** included in this submission; without a key the app runs in fallback mode.
 
-## 6. Tests
+## 5. Tests
 ```bash
-python -m pytest -q      # 40 automated unit tests (AI mocked, no key needed)
+python -m pytest -q      # 42 automated unit tests (AI mocked, no key needed)
 python evaluate.py       # 5 formal test cases for the evidence document -> docs/test_results.md
 ```
 
-## 7. Project structure
+## 6. Project structure
 ```
 app.py                      Streamlit UI: Step 1 (document -> test cases), Step 2 (test cases -> scripts)
 testforge/document.py       Reads Confluence exports (.docx/.doc/.pdf/.html/.txt) and splits them into user stories
@@ -80,13 +81,13 @@ tests/                      pytest suite
 evaluate.py                 Formal test cases
 ```
 
-## 8. Simulated / external components (declared)
+## 7. Simulated / external components (declared)
 - **All sample documents are synthetic.** The Confluence page "HMS Release 4.2 – Outpatient Module" was written for this PoC and contains no real client requirements or patient data. The `.doc` sample imitates Confluence's MIME-based "Export to Word" format.
 - **Anthropic Claude** (or Google Gemini) is an external, third-party LLM. The provider is chosen from the key: keys starting `sk-ant-` use Claude. Its test cases and scripts are drafts that the QA engineer must review.
 - The generated Cypress/Playwright specs are **skeletons**. Selectors marked `TODO: confirm selector` must be adapted to the real application. There is no demo system under test in this repository.
 - There is no direct Confluence API connection. The page is exported or pasted by hand.
 
-## 9. Known limitations
+## 8. Known limitations
 - The LLM can miss business or clinical rules, duplicate scenarios, or invent behaviour that is not in the story. TestForge mitigates this with validation, de-duplication, coverage-gap filling and human review, but cannot remove it entirely.
 - Story detection relies on common Confluence layouts: story keys such as `US-101`, "As a … I want …" sentences, AC lists or tables. Unusual page layouts may be read as a single story.
 - Scanned (image) PDFs have no text layer and cannot be read. Export the page as Word or HTML instead.
@@ -95,5 +96,5 @@ evaluate.py                 Formal test cases
 - Masking is regex-based. Identifiers such as MRN, National ID/Iqama and phone numbers are masked, but patient *names* in free text are not detected.
 - Live AI runs in this project used Claude because Google blocked Gemini API-key creation for the student account. The Gemini free tier may use submitted data to improve Google products, so real client (healthcare) requirements need the paid tier under a data-processing agreement, or a self-hosted model.
 
-## 10. AI use declaration
+## 9. AI use declaration
 Claude (Anthropic) via Claude Code was used to help design and write the code, tests, sample documents and documentation. All output was reviewed, run and tested by the student. See the Technical Evidence Document, page 3.
