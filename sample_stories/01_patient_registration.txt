@@ -1,0 +1,11 @@
+Title: Register a new patient at reception
+
+As a front-desk receptionist, I want to register a new patient in the Hospital Management System, so that the patient can be booked for consultations and billed correctly.
+
+Acceptance Criteria:
+AC1: Given the receptionist is on the "New Patient" screen, when all mandatory fields are completed and Save is clicked, then a unique Medical Record Number (MRN) is generated and shown within 2 seconds.
+AC2: The patient full name must be between 2 and 60 characters.
+AC3: Age is calculated from the date of birth and must be between 0 and 120 years; a future date of birth is rejected.
+AC4: The National ID / Iqama number must be exactly 10 digits and start with 1 (citizen) or 2 (resident).
+AC5: When a patient with the same National ID already exists, the message "Patient already registered" is shown and the existing MRN is displayed instead of creating a duplicate.
+AC6: The mobile number is mandatory and an invalid number shows "Enter a valid mobile number".

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TestForge Technical Evidence</title>
+<style>
+  @page { size: A4; margin: 8mm 10mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7.9pt; line-height: 1.25; color: #111; margin: 0; }
+  h1 { font-size: 12.5pt; margin: 0 0 1mm; }
+  h2 { font-size: 9.2pt; margin: 1.8mm 0 0.6mm; padding-bottom: 0.4mm; border-bottom: 1.2px solid #1d6b52; color: #1d6b52; }
+  p { margin: 0.6mm 0; }
+  table { width: 100%; border-collapse: collapse; margin: 0.8mm 0; }
+  th, td { border: 0.6px solid #777; padding: 0.6mm 1mm; vertical-align: top; text-align: left; }
+  th { background: #dcefe6; font-weight: 600; }
+  .meta { font-size: 8pt; color: #333; margin-bottom: 1mm; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5mm; }
+  .fill { background: #fff2a8; }
+  .page { page-break-after: always; }
+  tr { page-break-inside: avoid; }
+  .small { font-size: 7.3pt; }
+  .num { text-align: right; white-space: nowrap; }
+  .pass { color: #0a6b2e; font-weight: 700; }
+  code { font-family: Menlo, monospace; font-size: 7.3pt; }
+  svg text { font-family: "Helvetica Neue", Arial, sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- ============================ PAGES 1-2 ============================ -->
+<div>
+<h1>TestForge: Confluence Requirements → AI Test Cases → AI Automation Scripts</h1>
+<div class="meta">IT6070 Emerging Topics in IT, Assignment II · Student: I.M.R.Y. Ilangasinghe · ID: MS25914214 ·
+Repository: <span class="fill">[https://github.com/&lt;user&gt;/testforge]</span> · Video: <span class="fill">[link]</span></div>
+
+<h2>1. Professional, problem and evidence of need</h2>
+<p><b>Professional:</b> <b>“Nethmi”</b> (declared pseudonym; real name and company withheld for anonymity, as promised on the interview sheet), <b>Senior QA Engineer</b>, <b>healthcare software industry</b>, at a company that builds and maintains a <b>Hospital Management System (HMS) for a client in Saudi Arabia</b>.
+<b>Role and context:</b> requirements are written in <b>Confluence</b> and tracked in <b>Jira</b>. A sprint has <b>5–6 epics</b> with <b>5–8 user stories</b> each. Nethmi reads the Confluence pages, writes test cases <b>manually</b>, stores them in <b>TestRail</b>, and then automates them in <b>Cypress</b>.</p>
+<p><b>How it was identified:</b> a structured 10-question interview over <b>WhatsApp on 28 September 2026</b>, using a written question sheet. <b>Evidence of need (from the answers):</b> (1) test design takes <b>about one working day per epic</b>; (2) Cypress automation takes <b>“normally 2 days”</b>; (3) under time pressure <i>“we do feature testing for happy path”</i>, so negative and boundary tests are dropped; (4) ChatGPT was tried, but <i>“we can’t get exact test cases”</i>; (5) requirements are <b>confidential</b> and involve patient data; (6) to trust a tool, they want to <i>compare it with the story scope and see that the test cases cover all scenarios</i>.</p>
+<p><b>Requirements:</b>
+<b>R1 (functional).</b> From a Confluence requirements page, generate reviewable test cases for <u>every</u> user story and acceptance criterion, including negative and boundary cases, show coverage against the story scope, and export them to TestRail, in minutes instead of a day per epic.
+<b>R2 (functional).</b> From the approved test cases, generate <b>Cypress</b> automation scripts (one per story) that are checked before use, to shorten the 2-day automation effort.
+<b>R3 (non-functional).</b> Mask confidential and patient data (MRN, National ID/Iqama, phone numbers) before any AI call, and keep working when the AI is unavailable.</p>
+
+<h2>2. Emerging technology, justification and alternatives</h2>
+<p><b>Selected:</b> <b>generative AI / large language model</b> (<b>Anthropic Claude</b>, model <code>claude-opus-5-5</code>, JSON output; Google Gemini also supported) applied to <b>AI-augmented software testing</b>. <b>Why it fits:</b> Confluence requirements are natural language. An LLM understands the intent of each story and can propose realistic positive, negative, edge and healthcare-specific scenarios (duplicate patient, invalid ID, wrong slot), write concrete steps with exact expected messages, and translate the tests into Cypress code. Nethmi’s complaint that ChatGPT gave “no exact test cases” is addressed by wrapping the LLM in classic test design: <b>boundary values are computed exactly</b> and given to the model, the output must follow a schema, and <b>coverage of every AC is enforced and shown</b>.</p>
+<table class="small">
+<tr><th style="width:14%">Against requirements</th><th>LLM API: Claude (selected; Gemini supported)</th><th>Alt. A: rule/template generation (kept as fallback)</th><th>Alt. B: ChatGPT used manually (current practice)</th><th>Alt. C: self-hosted LLM (Ollama)</th></tr>
+<tr><td>R1: test cases from Confluence</td><td>Reads the whole page; per-story tests; schema-validated; AC coverage enforced; TestRail CSV</td><td>Generic, mechanical tests</td><td>One story at a time by copy-paste; “no exact test cases”; no coverage check</td><td>Medium quality (8B model)</td></tr>
+<tr><td>R2: Cypress scripts</td><td>Spec per story, syntax and safety checked</td><td>Skeletons only</td><td>Manual copy-paste</td><td>Possible but slower</td></tr>
+<tr><td>R3: privacy and availability</td><td>Masked before sending; paid no-training tier; fallback</td><td>Fully local</td><td>Raw confidential page pasted in</td><td>Fully local (best privacy)</td></tr>
+<tr><td>Cost</td><td>≈ LKR 170 per story (Opus 5.5); ≈ LKR 5 with Haiku 5.5</td><td>Free</td><td>≈ LKR 6,000 per user per month (paid plan)</td><td>GPU/16 GB+ machine; operations effort</td></tr>
+</table>
+<p><b>Decision:</b> an LLM API best meets R1 and R2 at low cost. Gemini was planned (free tier), but Google blocked API-key creation for this account (“request is suspicious”), so <b>Claude was integrated instead</b>; the provider is chosen from the key, and the design, checks and fallback are unchanged. Alternative A is embedded as the <b>fallback</b>. Alternative C is the route if the hospital client forbids external AI.</p>
+
+<h2>3. Architecture</h2>
+<svg viewBox="0 0 760 150" width="100%" height="140" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+  <g font-size="9.3" text-anchor="middle">
+    <rect x="2" y="30" width="70" height="46" rx="6" fill="#e9f5ef" stroke="#1d6b52"/><text x="37" y="49">Confluence</text><text x="37" y="62">page export</text>
+    <rect x="86" y="18" width="584" height="126" rx="8" fill="none" stroke="#999" stroke-dasharray="4 3"/><text x="378" y="12" fill="#555">TestForge – Streamlit web app (local or internal server)</text>
+    <rect x="96" y="30" width="96" height="46" rx="5" fill="#fff" stroke="#333"/><text x="144" y="45">Document reader</text><text x="144" y="57">.docx .doc .pdf .html</text><text x="144" y="69">→ story splitter</text>
+    <rect x="204" y="30" width="96" height="46" rx="5" fill="#fff" stroke="#333"/><text x="252" y="45">AC parser +</text><text x="252" y="57">Boundary Value</text><text x="252" y="69">Analysis</text>
+    <rect x="312" y="30" width="76" height="46" rx="5" fill="#fde9d9" stroke="#c0504d"/><text x="350" y="49">Privacy</text><text x="350" y="62">masking</text>
+    <rect x="400" y="30" width="118" height="46" rx="5" fill="#fff" stroke="#333"/><text x="459" y="45">AI orchestrator: JSON</text><text x="459" y="57">validate · de-dupe ·</text><text x="459" y="69">coverage-gap fill</text>
+    <rect x="530" y="30" width="130" height="46" rx="5" fill="#e2efda" stroke="#548235"/><text x="595" y="45">STEP 1: test cases</text><text x="595" y="57">QA review · coverage</text><text x="595" y="69">→ TestRail CSV</text>
+    <rect x="400" y="94" width="118" height="30" rx="5" fill="#f2f2f2" stroke="#777"/><text x="459" y="107">Rule-based</text><text x="459" y="118">generator (fallback)</text>
+    <rect x="530" y="92" width="130" height="44" rx="5" fill="#e2efda" stroke="#548235"/><text x="595" y="106">STEP 2: Cypress scripts</text><text x="595" y="118">node syntax + safety</text><text x="595" y="130">check → .zip</text>
+    <rect x="680" y="30" width="78" height="56" rx="6" fill="#e8e0f5" stroke="#5b3f8c"/><text x="719" y="50">Claude API</text><text x="719" y="63">(or Gemini) –</text><text x="719" y="76">external LLM</text>
+  </g>
+  <g stroke="#333" stroke-width="1.2" fill="none" marker-end="url(#a)">
+    <path d="M72,53 H94"/><path d="M192,53 H202"/><path d="M300,53 H310"/><path d="M388,53 H398"/><path d="M518,53 H528"/>
+    <path d="M470,30 C520,4 650,4 694,29"/><path d="M700,86 C670,100 640,104 662,112" stroke-dasharray="3 2"/><path d="M700,86 C660,96 560,92 520,64" stroke-dasharray="3 2"/>
+    <path d="M459,76 V92"/><path d="M595,76 V90"/>
+  </g>
+  <g font-size="7.8" fill="#555"><text x="600" y="12">masked prompt</text><text x="716" y="104">tests / code</text><text x="466" y="88">on error</text></g>
+</svg>
+
+<h2>4. Implemented connected features (Nethmi’s workflow: Confluence → TestRail → Cypress)</h2>
+<div class="two">
+<div><p><b>Step 1: Confluence document → test cases.</b> <i>Input:</i> a Confluence page exported as Word (.docx, or Confluence’s MIME-based “Export to Word” .doc), PDF or HTML, or pasted text. <i>Processing:</i> extracts headings, lists and AC tables (PDF lines are re-joined); splits the page into user stories by story key (e.g. US-101) or “As a … I want …”; parses the criteria; computes exact boundaries (name 2–60 characters gives 1/2/3/59/60/61; ID exactly 10 digits gives 9/10/11); masks patient data; and asks Gemini for JSON test cases per story, with the page’s context. It then validates, de-duplicates and <b>tops up any AC the AI missed</b>. <i>Output:</i> per-story coverage, an editable test table, a <b>TestRail CSV</b> and Gherkin files.</p></div>
+<div><p><b>Step 2: test cases → automation scripts.</b> <i>Input:</i> the test cases ticked in Step 1 (high priority or all). <i>Processing:</i> Claude writes one <b>Cypress</b> spec per story (Playwright optional), using <code>data-cy</code> selectors, <code>Cypress.env()</code> for credentials and exact expected messages. Each spec is checked with <code>node --check</code>, must contain <code>describe/it</code> blocks, and is rejected if it uses <code>cy.exec</code>, <code>cy.task</code>, <code>child_process</code> or <code>eval</code>. It is never executed. <i>Output:</i> validated <code>US-101.cy.js</code> … files in one ZIP. <b>Connection:</b> Step 2 only automates the tests the QA engineer approved in Step 1.</p></div>
+</div>
+<p><b>Error handling and fallback:</b> a wrong file type, an empty file or one over 5 MB, a corrupt or password-protected PDF, a scanned PDF with no text, a legacy binary .doc, or a page with no stories each give a clear message and no AI call. A missing or invalid key, 429 quota error, timeout (60 s), network error, invalid JSON or zero valid items switches to the rule-based generator, with a visible warning. A partial AI answer is topped up per AC. An invalid or unsafe script is replaced by a template skeleton. Every test and script shows the engine that produced it.</p>
+
+<h2 style="page-break-before: always">5. Test cases and results</h2>
+<p class="small">Run with <code>python evaluate.py</code>. In addition, <b>40 pytest unit tests</b> (all passing) cover all four Confluence export formats, bad documents, story/AC parsing, BVA, healthcare masking, AI JSON validation and de-duplication (mocked), every fallback path, exports, and rejection of unsafe or broken scripts. All documents are <b>synthetic</b>.</p>
+<table class="small">
+<tr><th>ID</th><th style="width:14%">Scenario</th><th style="width:16%">Input</th><th style="width:22%">Expected</th><th>Actual</th><th>Result</th></tr>
+<tr><td>TC1</td><td>Confluence page → AI test cases (Claude on)</td><td>Confluence page, Word export (3 stories, 12 ACs)</td><td>Tests for all 3 stories; 100% AC coverage each; Positive, Negative and Boundary</td><td>engine = claude; 59 tests (US-101 24, US-102 20, US-103 15); coverage 100% / 100% / 100%; 160 s for 3 stories</td><td class="pass">PASS</td></tr>
+<tr><td>TC2</td><td>PDF export read and split</td><td>Same page exported as PDF</td><td>US-101/102/103 with 5/4/3 ACs (same as Word)</td><td>US-101 (5 ACs), US-102 (4 ACs), US-103 (3 ACs)</td><td class="pass">PASS</td></tr>
+<tr><td>TC3</td><td><b>Error/fallback:</b> AI unavailable</td><td>Word export + invalid API key (real call to Claude)</td><td>No crash; warning shown; rule-based tests cover every AC of all stories</td><td>engine = fallback; “Claude rejected the API key”; 53 tests; coverage 100% / 100% / 100%</td><td class="pass">PASS</td></tr>
+<tr><td>TC4</td><td><b>Error:</b> wrong file</td><td>requirements.xlsx</td><td>Clear message; nothing sent to AI</td><td>“Unsupported file type. Use a Confluence export: .docx, .doc, .pdf or .html”</td><td class="pass">PASS</td></tr>
+<tr><td>TC5</td><td>Test cases → Cypress scripts</td><td>High-priority tests of the 3 stories</td><td>One spec per story; each passes node syntax and safety checks</td><td>US-101.cy.js (7 it()), US-102.cy.js (8), US-103.cy.js (9), written by Claude: all syntax OK, no unsafe calls</td><td class="pass">PASS</td></tr>
+</table>
+
+<h2>6. Feasibility of adoption</h2>
+<table class="small">
+<tr><th style="width:13%">Factor</th><th>Assessment</th></tr>
+<tr><td>Technical</td><td>Python 3.9+, Streamlit and one HTTPS API; runs on a QA laptop or a small internal VM. Input is a standard Confluence export and output fits the existing tools (TestRail CSV, Cypress <code>cypress/e2e</code>). Node.js is optional for the syntax check.</td></tr>
+<tr><td>Data / services</td><td>Pages are exported by hand today; the Confluence REST API would remove that step (needs an API token and IT approval). Needs outbound access to the Anthropic API, which hospital-project networks may restrict. The Claude API is prepaid (no free tier); a cheaper model can be set with <code>CLAUDE_MODEL</code>.</td></tr>
+<tr><td>Skills / time</td><td>The QA team already knows TestRail and Cypress. About 2 h of training on reviewing AI output. About 1 week to integrate (SSO, TestRail template, Cypress <code>data-cy</code> naming). About 4 h a month for upkeep.</td></tr>
+<tr><td>Privacy / security</td><td>Confidential healthcare requirements, subject to Saudi Arabia’s PDPL, the client contract, and Sri Lanka PDPA No. 9 of 2022 if the team is in Sri Lanka. Mitigations: MRN, ID, phone and e-mail masking; synthetic data only; paid no-training tier; keys in .env or memory; generated code checked and never executed automatically. Residual risk: business rules in the page are still sent, so client approval or a self-hosted model is needed.</td></tr>
+</table>
+<p><b>Benefits:</b> a whole Confluence page goes to test cases in minutes; negative and boundary tests that are skipped today come back; visible AC coverage; TestRail-ready output; Cypress specs as a starting point.
+<b>Limitations:</b> the LLM can miss clinical or business rules or invent behaviour. Unusual page layouts may not split into stories. Scanned PDFs cannot be read. Patient names are not detected by masking. Specs are skeletons whose selectors must be confirmed, and they are not run in the PoC.
+<b>Risks and mitigations:</b> over-trust in a patient-safety domain (mandatory review; engine and coverage labels); data leakage (masking, paid tier, local model); unsafe code (syntax and safety gate); model or price change (configurable model, fallback).
+<b>Improvements:</b> Confluence and TestRail API sync, RAG over the HMS’s past test cases, and running specs against a staging URL.</p>
+
+<h2>7. Cost estimate and affordability (LKR, 1 USD ≈ LKR 300)</h2>
+<p class="small"><b>Assumptions (workload from the interview):</b> about 5.5 epics per sprint with two-week sprints gives about 11 epics (≈ 70 stories) a month. Test design takes 1 day (8 h) per epic today. Each story needs about 1.5 AI design runs and one script. <b>Measured</b> with Claude Opus 5.5 on the largest sample story: ≈ 1.1k input + 8.5k output tokens per design run and ≈ 3.4k input + 14k output tokens per script (output includes the model’s reasoning). At the list price of USD 4 / 20 per million input / output tokens (verify current pricing), that is about USD 0.56 (≈ LKR 170) per story. QA time is costed at LKR 2,500 per hour. Existing laptops are reused, and the team is assumed to be based in Sri Lanka.</p>
+<div class="two">
+<table class="small">
+<tr><th>Setup (one-off)</th><th class="num">LKR</th></tr>
+<tr><td>Hardware (existing laptops / VM)</td><td class="num">0</td></tr>
+<tr><td>Hardening, SSO, TestRail and Cypress templates (40 h × 3,000)</td><td class="num">120,000</td></tr>
+<tr><td>QA team training (2 h + preparation)</td><td class="num">35,000</td></tr>
+<tr><td>Licences (Streamlit, Cypress: open source)</td><td class="num">0</td></tr>
+<tr><th>Total setup</th><th class="num">155,000</th></tr>
+</table>
+<table class="small">
+<tr><th>Recurring (per month)</th><th class="num">LKR</th></tr>
+<tr><td>Claude API, Opus 5.5 (≈ 70 stories × LKR 170)</td><td class="num">≈ 12,000</td></tr>
+<tr><td>Internal VM hosting (2 vCPU / 2 GB)</td><td class="num">≈ 6,000</td></tr>
+<tr><td>Maintenance: prompts, rules, model updates (4 h)</td><td class="num">12,000</td></tr>
+<tr><th>Total recurring</th><th class="num">≈ 30,000</th></tr>
+<tr><td><i>PoC as built (laptop, synthetic documents; test runs ≈ USD 2)</i></td><td class="num"><i>≈ 600</i></td></tr>
+</table>
+</div>
+<p><b>Expected value:</b> if designing one epic’s tests drops from 8 h to about 3 h (reviewing instead of writing), that saves 5 h × 11 epics ≈ <b>55 h a month ≈ LKR 137,500</b>, about <b>4.5× the recurring cost</b>. Setup pays back in about 1.4 months. Switching to Claude Haiku 5.5 would cut the API line from ≈ LKR 12,000 to ≈ LKR 300 a month, if review shows its tests are good enough. This excludes Cypress time saved from the 2-day automation effort. <b>Lower-cost alternative:</b> rule-based templates only (LKR 0 recurring, but generic tests). <b>Current practice:</b> ChatGPT used manually costs about LKR 6,000 per user per month on a paid plan, but gives no exact tests, no coverage and a privacy risk. <b>Judgement: affordable.</b> The main costs are one-off integration and upkeep. Only synthetic data was used in the PoC.</p>
+
+<h2>8. Adoption / commercialisation approach</h2>
+<p><b>Path:</b> (1) a two-sprint pilot on 2–3 HMS epics in Nethmi’s team, comparing design and automation hours, the number of negative and boundary tests, and defects found against manual epics; (2) an internal rollout with SSO, TestRail import and Cypress conventions, and later a Confluence API connector; (3) optionally, a Confluence/TestRail add-on for QA teams at Sri Lankan software houses, priced per QA seat. <b>Who pays:</b> the company’s QA/engineering budget. The saved QA days improve margins on the fixed-scope HMS contract. <b>Main condition for proceeding:</b> the healthcare client and company security must approve sending <i>masked</i> requirements to an external LLM under a data-processing agreement (otherwise a self-hosted model is needed), <b>and</b> the pilot must show at least 30% less design time, with at least 80% of AI tests accepted after review.</p>
+
+<!-- ============================ PAGE 3 ============================ -->
+<div style="page-break-before: always">
+<h2>AI Use Declaration</h2>
+<p class="small">AI tools were used as the brief encourages, and the student remains responsible for correctness. <b>Claude, called through the Anthropic API,</b> is also part of the <i>product</i> (the emerging technology being evaluated); that use is product behaviour, not authorship of the submission. <b>The interview answers were given by the real professional and were not generated by AI.</b> <span class="fill">Add a row for any other AI tool you used yourself.</span></p>
+<table class="small">
+<tr><th style="width:9%">AI tool</th><th style="width:12%">Purpose</th><th style="width:25%">Prompt or instruction (summarised)</th><th style="width:21%">Output used</th><th>How the output was verified or corrected</th></tr>
+<tr><td>Claude (Anthropic) in Claude Code</td><td>Topic selection and ideas</td><td>“This is my second assignment of emerging technology … please select relevant topics … do it properly with guidelines.” Chosen: software quality assurance.</td><td>Problem idea, technology comparison</td><td>Checked against every task item and rubric row. <b>Validated with a real QA engineer</b>, whose answers changed the design (below).</td></tr>
+<tr><td>Claude</td><td>Interview preparation</td><td>Prepare questions to identify a QA engineer’s test-design problems</td><td>10-question interview sheet</td><td>Sent to the engineer on WhatsApp (28 Sep 2026); the answers were written by the engineer. No answers are AI-generated.</td></tr>
+<tr><td>Claude</td><td>Adapting to evidence and feedback</td><td>Update the solution to the interview answers; then “once I give the Confluence document I want to create test cases, and next generate automation scripts – that’s enough”</td><td>Confluence document input (docx/doc/pdf/html) with story splitting; Cypress output; healthcare samples and masking; simplified two-step UI; requirement-quality feature removed</td><td>Each change traced to an interview answer (Q2 Confluence, Q3, Q7 Cypress, Q9, Q10) or my own scope decision. New unit tests for all four export formats, bad documents and Cypress checks.</td></tr>
+<tr><td>Claude</td><td>Code generation</td><td>Implement the modules and Streamlit UI (Python 3.9)</td><td><code>testforge/</code>, <code>app.py</code></td><td>Run and inspected. <b>Defects found and fixed:</b> PDF exports broke sentences across lines, giving 8 ACs instead of 5 (re-flow added); a prompt-building operator-precedence bug that dropped the system prompt (caught by unit tests); missed “maximum … is N” and “exactly N digits” boundaries; an over-strict code check; noisy labels.</td></tr>
+<tr><td>Claude</td><td>Prompt engineering</td><td>Prompts for strict-JSON test cases using BVA hints and page context, and for safe Cypress/Playwright code</td><td><code>TEST_DESIGN_PROMPT</code>, <code>CYPRESS_PROMPT</code>, <code>SCRIPT_PROMPT</code></td><td>Output is never trusted directly: schema validation, de-duplication, coverage top-up and syntax/safety gates are unit-tested. Real Claude output for TC1 was compared against the ACs (100% coverage; positive, negative and boundary tests).</td></tr>
+<tr><td>Claude</td><td>Test data and testing</td><td>Synthetic Confluence page in 4 export formats; pytest suite; UI walkthrough</td><td>sample_docs/, 40 unit tests, 5 formal cases</td><td>40/40 pass; TC2–TC5 pass; TC3 uses a real invalid-key call; both steps exercised in a browser. No real patient or client data was used.</td></tr>
+<tr><td>Claude</td><td>Documentation</td><td>Draft the README, this document, the video script, the weekly forms and the progress slides</td><td>README, this PDF, video script, forms, PPTX</td><td>Cost arithmetic recomputed by hand; prices and legal references to be checked against official sources. <span class="fill">Reworded in my own words.</span></td></tr>
+</table>
+<p class="small"><b>Responsibility statement:</b> I have reviewed, run and tested all AI-generated material, and I can explain every part of the submitted solution. <span class="fill">The interviewee’s consent to use anonymised answers is kept (WhatsApp message).</span></p>
+</div>
+</body>
+</html>

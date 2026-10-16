@@ -1,0 +1,11 @@
+Title: Book an outpatient appointment
+
+As a patient using the hospital mobile app, I want to book an appointment with a doctor, so that I can be seen at a convenient time without calling the hospital.
+
+Acceptance Criteria:
+- Available 15-minute slots for the selected doctor and date are displayed, and booked slots are not selectable.
+- Appointments can be booked up to 30 days in advance; dates in the past cannot be selected.
+- A patient can have a maximum of 3 active appointments at the same time.
+- Cancellation is allowed only at least 2 hours before the appointment time; otherwise the message "Please contact the clinic to cancel" is shown.
+- After a successful booking, a confirmation with the doctor, date, time and booking reference is displayed and an SMS is sent.
+- If the selected slot is taken by another user before confirmation, the message "This slot is no longer available" is shown and the slot list is refreshed.

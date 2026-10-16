@@ -1,0 +1,57 @@
+Date: Fri, 03 Oct 2026 09:00:00 +0530
+Message-ID: <x@confluence>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="----=_Part_0"
+
+------=_Part_0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html><head><title>HMS Release 4.2 - Outpatient Module - Requirements</titl=
+e><style>body{font-family:Arial}</style></head><body>
+<h1>HMS Release 4.2 - Outpatient Module - Requirements</h1><p>This page des=
+cribes the outpatient registration and appointment features for the Hospita=
+l Management System (HMS) release 4.2. Users: front-desk receptionists and =
+patients using the mobile app. Owner: Product Owner, Outpatient. Status: Ap=
+proved for Sprint 18.</p>
+<h2>US-101 Register a new patient</h2><p>As a front-desk receptionist, I wa=
+nt to register a new patient, so that the patient can be booked for consult=
+ations and billed correctly.</p><h3>Acceptance Criteria</h3><ul>
+<li>Given the receptionist is on the New Patient screen, when all mandatory=
+ fields are completed and Save is clicked, then a unique Medical Record Num=
+ber (MRN) is generated and shown within 2 seconds.</li>
+<li>The patient full name must be between 2 and 60 characters.</li>
+<li>Age is calculated from the date of birth and must be between 0 and 120 =
+years; a future date of birth is rejected.</li>
+<li>The National ID / Iqama number must be exactly 10 digits and start with=
+ 1 or 2.</li>
+<li>When a patient with the same National ID already exists, the message &q=
+uot;Patient already registered&quot; is shown and the existing MRN is displ=
+ayed.</li>
+</ul>
+<h2>US-102 Book an outpatient appointment</h2><p>As a patient using the hos=
+pital mobile app, I want to book an appointment with a doctor, so that I ca=
+n be seen without calling the hospital.</p><h3>Acceptance Criteria</h3><ul>
+<li>Available 15-minute slots for the selected doctor and date are displaye=
+d, and booked slots cannot be selected.</li>
+<li>Appointments can be booked up to 30 days in advance; past dates cannot =
+be selected.</li>
+<li>A patient can have a maximum of 3 active appointments; booking a 4th sh=
+ows &quot;You already have 3 active appointments&quot;.</li>
+<li>After booking, a confirmation with doctor, date, time and booking refer=
+ence is displayed and an SMS is sent.</li>
+</ul>
+<h2>US-103 Cancel an appointment</h2><p>As a patient, I want to cancel my a=
+ppointment in the app, so that the slot can be given to another patient.</p=
+><h3>Acceptance Criteria</h3><ul>
+<li>Cancellation is allowed only at least 2 hours before the appointment ti=
+me.</li>
+<li>Within 2 hours of the appointment the message &quot;Please contact the =
+clinic to cancel&quot; is shown and the Cancel button is disabled.</li>
+<li>After cancellation the slot becomes available again immediately and a c=
+ancellation SMS is sent.</li>
+</ul>
+</body></html>
+------=_Part_0--

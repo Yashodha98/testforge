@@ -1,0 +1,7 @@
+| ID | Scenario | Input | Expected | Actual | Result |
+|---|---|---|---|---|---|
+| TC1 | Confluence export -> AI test cases (AI key available) | Confluence_HMS_Outpatient_Requirements.docx (3 stories, 12 ACs) | Test cases for all 3 stories; 100% AC coverage each; Positive, Negative and Boundary types | 59 tests (US-101 24, US-102 20, US-103 15); coverage 100%/100%/100%; engine claude; 160449 ms total | PASS |
+| TC2 | Confluence PDF export is read and split | Confluence_HMS_Outpatient_Requirements.pdf | 3 stories US-101/102/103 with 5/4/3 acceptance criteria (same as Word export) | Stories found: US-101 (5 ACs), US-102 (4 ACs), US-103 (3 ACs) | PASS |
+| TC3 | Error/fallback: invalid AI API key | Confluence_HMS_Outpatient_Requirements.docx + key 'sk-ant-INVALID-KEY-FOR-TEST' | No crash; warning shown; rule-based test cases still cover every AC of all 3 stories | engine=fallback; reason='Claude rejected the API key (invalid or revoked).'; 53 tests; coverage 100%/100%/100% | PASS |
+| TC4 | Error: wrong file type uploaded | requirements.xlsx (spreadsheet) | Clear message; nothing sent to AI | DocumentError: Unsupported file type. Use a Confluence export: .docx, .doc, .pdf or .html (or .txt/.md). | PASS |
+| TC5 | Test cases -> Cypress automation scripts | High-priority test cases of US-101/102/103 | One Cypress spec per story; each passes node syntax check and safety rules | US-101.cy.js by claude (7 it() blocks); US-102.cy.js by claude (8 it() blocks); US-103.cy.js by claude (9 it() blocks) | PASS |
