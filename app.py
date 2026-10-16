@@ -14,9 +14,9 @@ import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 
-load_dotenv()  # before importing testforge, which reads CLAUDE_MODEL / CLAUDE_EFFORT
+load_dotenv(Path(__file__).parent / ".env")  # before importing testforge, which reads CLAUDE_MODEL / TESTFORGE_EFFORT
 
-from testforge.ai import CLAUDE_EFFORT, DEFAULT_MODEL, design_tests, model_for, provider  # noqa: E402
+from testforge.ai import TESTFORGE_EFFORT, DEFAULT_MODEL, design_tests, model_for, provider  # noqa: E402
 from testforge.automation import generate_script, to_csv, to_gherkin, traceability
 from testforge.boundaries import extract_boundaries
 from testforge.document import DocumentError, extract_text, split_stories
@@ -41,7 +41,7 @@ with st.sidebar:
                                  "(aistudio.google.com/apikey). Kept in memory only.") or env_key
     if provider(api_key) == "claude":
         model = model_for(api_key)
-        st.caption("Model: `{}` · effort: `{}`".format(model, CLAUDE_EFFORT))
+        st.caption("Model: `{}` · effort: `{}`".format(model, TESTFORGE_EFFORT))
     else:
         model = st.text_input("Gemini model", value=DEFAULT_MODEL)
     offline = st.toggle("Force offline mode (rule-based only)", value=False,

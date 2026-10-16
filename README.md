@@ -49,7 +49,7 @@ Toggle **Force offline mode** in the sidebar to demonstrate the fallback.
 |---|---|---|
 | `ANTHROPIC_API_KEY` | No (fallback without it) | Claude key (`sk-ant-...`) from https://console.anthropic.com/settings/keys; prepaid credit needed. Used first if set. You can also paste it in the sidebar; it is held in memory only. |
 | `CLAUDE_MODEL` | No | Default `claude-opus-5-5`. Set `claude-haiku-5-5` for a much cheaper, faster model. |
-| `CLAUDE_EFFORT` | No | `medium` (default), `low` (about 40 s per story – used for the live demo) or `high`. |
+| `TESTFORGE_EFFORT` | No | `medium` (default), `low` (about 40 s per story – used for the live demo) or `high`. |
 | `GEMINI_API_KEY` | No (fallback without it) | Free key from https://aistudio.google.com/apikey. You can also paste it in the sidebar; it is held in memory only. |
 | `GEMINI_MODEL` | No | Default `gemini-2.5-flash`. Change it if Google renames or retires the model. |
 
