@@ -20,6 +20,8 @@ from .privacy import mask
 
 DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-opus-5-5")
+# low = faster and cheaper (useful for live demos); medium = default; high = most thorough
+CLAUDE_EFFORT = os.getenv("CLAUDE_EFFORT", "medium")
 TIMEOUT_MS = 60_000
 MAX_TESTS = 40
 
@@ -83,7 +85,7 @@ def _claude_client(api_key: str, model: str) -> GenerateFn:
     def _generate(prompt: str) -> str:
         with client.messages.stream(
             model=model, max_tokens=64000,
-            output_config={"effort": "medium"},
+            output_config={"effort": CLAUDE_EFFORT},
             messages=[{"role": "user", "content": prompt}],
             # If a safety classifier declines, the server retries on a suitable fallback model.
             extra_headers={"anthropic-beta": "server-side-fallback-2026-07-01"},
