@@ -14,7 +14,9 @@ import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 
-from testforge.ai import DEFAULT_MODEL, design_tests, model_for, provider
+load_dotenv()  # before importing testforge, which reads CLAUDE_MODEL / CLAUDE_EFFORT
+
+from testforge.ai import CLAUDE_EFFORT, DEFAULT_MODEL, design_tests, model_for, provider  # noqa: E402
 from testforge.automation import generate_script, to_csv, to_gherkin, traceability
 from testforge.boundaries import extract_boundaries
 from testforge.document import DocumentError, extract_text, split_stories
@@ -22,7 +24,6 @@ from testforge.models import PRIORITIES, TEST_TYPES, TestCase
 from testforge.privacy import mask
 from testforge.story_parser import StoryParseError, parse_story
 
-load_dotenv()
 ROOT = Path(__file__).parent
 SAMPLES = sorted(list((ROOT / "sample_docs").glob("Confluence_*")) + list((ROOT / "sample_stories").glob("*.txt")))
 MAX_STORIES = 6
@@ -40,7 +41,7 @@ with st.sidebar:
                                  "(aistudio.google.com/apikey). Kept in memory only.") or env_key
     if provider(api_key) == "claude":
         model = model_for(api_key)
-        st.caption("Model: `{}`".format(model))
+        st.caption("Model: `{}` · effort: `{}`".format(model, CLAUDE_EFFORT))
     else:
         model = st.text_input("Gemini model", value=DEFAULT_MODEL)
     offline = st.toggle("Force offline mode (rule-based only)", value=False,
