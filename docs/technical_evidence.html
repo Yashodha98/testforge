@@ -49,7 +49,7 @@ Repository: <a href="https://github.com/Yashodha98/testforge">github.com/Yashodh
 <tr><td>R1: test cases from Confluence</td><td>Understands each story; realistic positive, negative, edge and healthcare scenarios with exact expected messages; schema-validated; AC coverage enforced; TestRail CSV</td><td>Generic, mechanical tests from patterns; misses scenarios that are implied but not written</td></tr>
 <tr><td>R2: Cypress scripts</td><td>Complete spec per story with steps and assertions; syntax and safety checked</td><td>Skeletons with TODO comments only</td></tr>
 <tr><td>Privacy and availability</td><td>Data masked before sending; needs internet and client approval</td><td>Fully local; always available</td></tr>
-<tr><td>Cost</td><td>≈ LKR 170 per story (measured, Opus 5.5); ≈ LKR 5 with Haiku 5.5</td><td>Free</td></tr>
+<tr><td>Cost</td><td>≈ LKR 4 per story with Claude Haiku 5.5 (production setting); ≈ LKR 170 with Opus 5.5 (used in the PoC)</td><td>Free</td></tr>
 </table>
 <p><b>Decision:</b> an LLM API best meets R1 and R2 at low cost. Gemini was planned (free tier), but Google blocked API-key creation for this account (“request is suspicious”), so <b>Claude was integrated instead</b>; the provider is chosen from the key, and the design, checks and fallback are unchanged. The alternative is not discarded: it is embedded as the <b>fallback</b>, so the tool still works without the AI. (Current practice – ChatGPT by copy-paste – gave “no exact test cases” and exposes confidential pages; a self-hosted model is the route if the client forbids external AI.)</p>
 
@@ -108,26 +108,26 @@ Repository: <a href="https://github.com/Yashodha98/testforge">github.com/Yashodh
 <b>Improvements:</b> Confluence and TestRail API sync, RAG over the HMS’s past test cases, and running specs against a staging URL.</p>
 
 <h2>7. Cost estimate and affordability (LKR, 1 USD ≈ LKR 300)</h2>
-<p class="small"><b>Assumptions (workload from the interview):</b> about 5.5 epics per sprint with two-week sprints gives about 11 epics (≈ 70 stories) a month. Test design takes 1 day (8 h) per epic today. Each story needs about 1.5 AI design runs and one script. <b>Measured</b> with Claude Opus 5.5 on the largest sample story: ≈ 1.1k input + 8.5k output tokens per design run and ≈ 3.4k input + 14k output tokens per script (output includes the model’s reasoning). At the list price of USD 4 / 20 per million input / output tokens (verify current pricing), that is about USD 0.56 (≈ LKR 170) per story. QA time is costed at LKR 2,500 per hour. Existing laptops are reused, and the team is assumed to be based in Sri Lanka.</p>
+<p class="small"><b>Assumptions (workload from the interview):</b> about 5.5 epics per sprint with two-week sprints gives about 11 epics (≈ 70 stories) a month. Test design takes 1 day (8 h) per epic today. Each story needs about 1.5 AI design runs and one script. Token use was <b>measured</b> with real Claude runs on the largest sample story: ≈ 1.1k input + 8.5k output tokens per design run and ≈ 3.4k input + 14k output tokens per script. For production the cost-efficient <b>Claude Haiku 5.5</b> model is used (configurable): at USD 0.10 / 0.50 per million input / output tokens (verify current pricing) this is about USD 0.014 (≈ LKR 4) per story – an estimate to be confirmed in the pilot, together with output quality. (The PoC demonstrations used Opus 5.5, ≈ LKR 170 per story.) Developer time LKR 3,000 / h; QA time LKR 2,500 / h. The existing internal server and laptops are reused; the team is assumed to be in Sri Lanka.</p>
 <div class="two">
 <table class="small">
 <tr><th>Setup (one-off)</th><th class="num">LKR</th></tr>
-<tr><td>Hardware (existing laptops / VM)</td><td class="num">0</td></tr>
-<tr><td>Hardening, SSO, TestRail and Cypress templates (40 h × 3,000)</td><td class="num">120,000</td></tr>
-<tr><td>QA team training (2 h + preparation)</td><td class="num">35,000</td></tr>
+<tr><td>Hardware (existing laptops / internal server)</td><td class="num">0</td></tr>
+<tr><td>Integration and set-up: TestRail and Cypress templates (20 h × 3,000)</td><td class="num">60,000</td></tr>
+<tr><td>QA team training (1-hour session + short guide)</td><td class="num">10,000</td></tr>
 <tr><td>Licences (Streamlit, Cypress: open source)</td><td class="num">0</td></tr>
-<tr><th>Total setup</th><th class="num">155,000</th></tr>
+<tr><th>Total setup</th><th class="num">70,000</th></tr>
 </table>
 <table class="small">
 <tr><th>Recurring (per month)</th><th class="num">LKR</th></tr>
-<tr><td>Claude API, Opus 5.5 (≈ 70 stories × LKR 170)</td><td class="num">≈ 12,000</td></tr>
-<tr><td>Internal VM hosting (2 vCPU / 2 GB)</td><td class="num">≈ 6,000</td></tr>
-<tr><td>Maintenance: prompts, rules, model updates (4 h)</td><td class="num">12,000</td></tr>
-<tr><th>Total recurring</th><th class="num">≈ 30,000</th></tr>
+<tr><td>Claude API, Haiku 5.5 (≈ 70 stories × LKR 4)</td><td class="num">≈ 300</td></tr>
+<tr><td>Hosting on the existing internal server</td><td class="num">0</td></tr>
+<tr><td>Maintenance: prompts, rules, model updates (2 h × 3,000)</td><td class="num">6,000</td></tr>
+<tr><th>Total recurring</th><th class="num">≈ 6,300</th></tr>
 <tr><td><i>PoC as built (laptop, synthetic documents; test runs ≈ USD 2)</i></td><td class="num"><i>≈ 600</i></td></tr>
 </table>
 </div>
-<p><b>Expected value:</b> if designing one epic’s tests drops from 8 h to about 3 h (reviewing instead of writing), that saves 5 h × 11 epics ≈ <b>55 h a month ≈ LKR 137,500</b>, about <b>4.5× the recurring cost</b>. Setup pays back in about 1.4 months. Switching to Claude Haiku 5.5 would cut the API line from ≈ LKR 12,000 to ≈ LKR 300 a month, if review shows its tests are good enough. This excludes Cypress time saved from the 2-day automation effort. <b>Lower-cost alternative:</b> rule-based templates only (LKR 0 recurring, but generic tests). <b>Current practice:</b> ChatGPT used manually costs about LKR 6,000 per user per month on a paid plan, but gives no exact tests, no coverage and a privacy risk. <b>Judgement: affordable.</b> The main costs are one-off integration and upkeep. Only synthetic data was used in the PoC.</p>
+<p><b>Expected value:</b> if designing one epic’s tests drops from 8 h to about 3 h (reviewing instead of writing), that saves 5 h × 11 epics ≈ <b>55 h a month ≈ LKR 137,500</b>, about <b>20× the recurring cost</b>. Setup pays back in <b>under one month</b>. If the pilot shows Haiku’s tests are not good enough, Opus 5.5 can be used (≈ LKR 12,000 a month more) and the tool is still affordable. This excludes Cypress time saved from the 2-day automation effort. <b>Lower-cost alternative:</b> rule-based templates only (LKR 0 recurring, but generic tests). <b>Current practice:</b> ChatGPT used manually costs about LKR 6,000 per user per month on a paid plan, but gives no exact tests, no coverage and a privacy risk. <b>Judgement: affordable.</b> The main costs are a small one-off integration and upkeep. Only synthetic data was used in the PoC.</p>
 
 <h2>8. Adoption / commercialisation approach</h2>
 <p><b>Path:</b> (1) a two-sprint pilot on 2–3 HMS epics in Nethmi’s team, comparing design and automation hours, the number of negative and boundary tests, and defects found against manual epics; (2) an internal rollout with SSO, TestRail import and Cypress conventions, and later a Confluence API connector; (3) optionally, a Confluence/TestRail add-on for QA teams at Sri Lankan software houses, priced per QA seat. <b>Who pays:</b> the company’s QA/engineering budget. The saved QA days improve margins on the fixed-scope HMS contract. <b>Main condition for proceeding:</b> the healthcare client and company security must approve sending <i>masked</i> requirements to an external LLM under a data-processing agreement (otherwise a self-hosted model is needed), <b>and</b> the pilot must show at least 30% less design time, with at least 80% of AI tests accepted after review.</p>

@@ -83,13 +83,16 @@ def _claude_client(api_key: str, model: str) -> GenerateFn:
     client = anthropic.Anthropic(api_key=api_key, timeout=TIMEOUT_MS / 1000 * 3)
 
     def _generate(prompt: str) -> str:
+        extra = {}
+        if model.startswith(("claude-opus", "claude-fable", "claude-sonnet-5-5")):
+            # If a safety classifier declines, the server retries on a suitable fallback model.
+            extra = {"extra_headers": {"anthropic-beta": "server-side-fallback-2026-07-01"},
+                     "extra_body": {"fallbacks": "default"}}
         with client.messages.stream(
             model=model, max_tokens=64000,
             output_config={"effort": TESTFORGE_EFFORT},
             messages=[{"role": "user", "content": prompt}],
-            # If a safety classifier declines, the server retries on a suitable fallback model.
-            extra_headers={"anthropic-beta": "server-side-fallback-2026-07-01"},
-            extra_body={"fallbacks": "default"},
+            **extra,
         ) as stream:
             msg = stream.get_final_message()
         USAGE["calls"] += 1
